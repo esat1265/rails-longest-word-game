@@ -1,0 +1,40 @@
+<%
+  require "open-uri"
+  require 'json'
+%>
+
+<%
+  response = URI.parse("https://wagon-dictionary.herokuapp.com/#{params[:letter]}")
+  json = JSON.parse(response.read)
+%>
+
+
+<% resulttime = (@end_time.to_i - params[:start_time].to_i) %>
+
+<% score = resulttime > 60.0 ? 0 : (json["word"].size * (1.0 - (resulttime / 60.0))) %>
+
+<div class="container">
+  <div class="row">
+    <div class="column">
+<h3 class="alert alert-success" role="alert">RESULT</h3>
+
+<% if json["found"] && json["word"].upcase.chars.all? { |char| params[:random_letters].include?(char) } %>
+<p class="alert alert-primary" role="alert"><strong>Congratulations!</strong> <%= json["word"].upcase %> is a valid English word.
+<br><br>
+Your Score : <span> <%= score %></span>
+</p>
+<% elsif json["found"] %>
+<p class="alert alert-warning" role="alert">Sorry, but <%= json["word"].upcase %> can't be built out of.<%= params[:random_letters] %>
+<br>
+Your Score : 0 </p>
+<% else %>
+<p class="alert alert-danger" role="alert"><strong>Sorry, but</strong> <%= json["word"].upcase %> does not seem to be a valid English word.
+<br>
+Your Score : 0</p>
+<% end %>
+
+<%= link_to "Play Again", new_path %>
+
+    </div>
+  </div>
+</div>

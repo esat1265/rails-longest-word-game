@@ -1,0 +1,28 @@
+<% letters = ('A'..'Z').to_a %>
+<% random_letters = letters.sample(10) %>
+
+<div class="container">
+  <div class="row">
+    <div class="column">
+
+<h2 class="alert alert-success" role="alert">********* Welcome to the longest word-game! *********</h2>
+
+<h3>Here is your grid:</h3>
+<ul class='d-flex'>
+  <% random_letters.each do |letter| %>
+    <div class='bg-primary text-light m-2 p-2 border'> <%= letter %></div>
+  <% end %>
+</ul>
+
+<p>*****************************************************</p>
+<p>What is your longest word?</p>
+
+<form action="/score" data-turbo="false">
+  <input type="hidden" name="random_letters" value="<%= random_letters %>">
+  <input type="hidden" name="start_time" value="<%= @start_time %>">
+  <input type="text" name="letter">
+  <input type="submit" value="letter">
+</form>
+    </div>
+  </div>
+</div>
